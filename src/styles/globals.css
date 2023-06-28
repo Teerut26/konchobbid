@@ -5,3 +5,11 @@
 * {
   font-family: "Noto Sans Thai", sans-serif !important;
 }
+
+.btn {
+    @apply flex cursor-pointer select-none justify-center rounded border p-2 hover:bg-slate-50 h-fit w-fit
+}
+
+.btn-sm {
+    @apply flex cursor-pointer select-none justify-center rounded border p-1 hover:bg-slate-50 h-fit w-fit
+}
