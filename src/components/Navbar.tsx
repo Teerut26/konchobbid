@@ -6,7 +6,7 @@ interface Props {}
 const Navbar: NextPage<Props> = () => {
   const { signOutAction, user } = useFirestore();
   return (
-    <div className="mx-auto flex w-full max-w-sm items-center justify-between px-3">
+    <div className="mx-auto flex w-full max-w-md items-center justify-between px-3">
       <div className="py-3 text-2xl">ยอดนักบิด Offcial</div>
       {user && (
         <button

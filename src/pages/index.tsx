@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <NavbarLayouts>
-      <div className="mx-auto flex w-full max-w-sm flex-col gap-1">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-1">
         {_.orderBy(biders,"bid","desc")?.map((user, i) => (
           <RankCard user={user} index={i} key={i} />
         ))}
