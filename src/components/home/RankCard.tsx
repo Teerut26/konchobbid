@@ -93,7 +93,7 @@ const RankCard: NextPage<Props> = ({ user, index }) => {
             }}
             className="btn btn bg-green-500 text-white hover:bg-green-600"
           >
-            {userFirebase ? "โหวต" : "login ก่อน"}
+            {userFirebase ? `${user.vote}/3 โหวต` : "login ก่อน"}
           </button>
         </VoteAreaStyle>
       </Collapse>

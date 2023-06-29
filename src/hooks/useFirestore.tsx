@@ -2,8 +2,12 @@ import { app, db } from "@/configs/firebase";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
+  getDoc,
+  getDocs,
   onSnapshot,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import {
@@ -33,6 +37,17 @@ export default function useFirestore() {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      const data = await getDocs(collection(db, "bider"));
+      let biders: UserInterface[] = [];
+      data.forEach((d) => {
+        biders.push({ ...d.data(), id: d.id } as UserInterface);
+      });
+      setBiders(biders);
+    })();
+  }, []);
+
+  useEffect(() => {
     const auth = getAuth(app);
     auth.onAuthStateChanged((user) => {
       setUser(user);
@@ -44,13 +59,41 @@ export default function useFirestore() {
     await addDoc(collection(db, "bider"), {
       name: name,
       bid: 0,
+      vote: 0,
+      userVote: [],
     });
   };
 
   const vote = async (id: string) => {
-    await updateDoc(doc(db, "bider", id), {
-      bid: biders?.find((b) => b.id === id)?.bid! + 1,
-    });
+    const checkCanVote = await getDoc(doc(db, "bider", id));
+
+    if (checkCanVote.data()) {
+      const userVote = checkCanVote.data()?.userVote;
+      if (userVote.includes(user?.uid)) {
+        alert("คุณได้โหวตแล้ว");
+        return;
+      } else {
+        if (userVote.length + 1 >= 3) {
+          await updateDoc(doc(db, "bider", id), {
+            bid: biders?.find((b) => b.id === id)?.bid! + 1,
+          });
+          await updateDoc(doc(db, "bider", id), {
+            userVote: [],
+            vote: 0,
+          });
+        } else {
+          await updateDoc(doc(db, "bider", id), {
+            userVote: [...userVote, user?.uid],
+          });
+          await updateDoc(doc(db, "bider", id), {
+            vote: biders?.find((b) => b.id === id)?.vote! + 1,
+          });
+        }
+      }
+    } else {
+      alert("ไม่พบข้อมูล");
+      return;
+    }
   };
 
   const signInWithGoogle = async () => {

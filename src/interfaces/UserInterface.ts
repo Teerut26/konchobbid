@@ -1,5 +1,7 @@
 interface UserInterface {
-    name?: string
-    bid?: number
-    id?: string
+  id?: string;
+  name?: string;
+  bid?: number;
+  vote?: number;
+  userVote?: string[];
 }
